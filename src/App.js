@@ -1,15 +1,12 @@
 import React from "react";
-import useAppContext from "./hooks/useAppContext";
+import { AppContextProvider } from "./AppContext";
+import Mp3Player from "./main";
 
 const App = () => {
-  const { msg, sayHello } = useAppContext();
-
   return (
-    <div>
-      <h1>Hello</h1>
-      <h2>{msg}</h2>
-      <button onClick={() => sayHello()}>Click</button>
-    </div>
+    <AppContextProvider>
+      <Mp3Player />
+    </AppContextProvider>
   );
 };
 

@@ -1,0 +1,112 @@
+@import "../../styles/shared";
+
+@mixin control-btn {
+  width: 150px;
+  height: 50px;
+  background-color: $color-100;
+  border: 1px solid $color-300;
+  font-size: 1rem;
+}
+
+.mp3-app-playlist {
+  width: 600px;
+  height: 100%;
+  background-color: $color-200;
+  display: flex;
+  flex-flow: column nowrap;
+
+  .track-list-wrapper {
+    flex: 1 1 auto;
+    width: 100%;
+    padding: $spacing-unit;
+    overflow: scroll;
+
+    .track-list {
+      width: 100%;
+
+      .track-list-item {
+        width: 100%;
+        padding: $spacing-unit;
+        border-bottom: 1px solid $color-300;
+        display: flex;
+        flex-flow: row nowrap;
+
+        &:hover {
+          background-color: $color-hover;
+          cursor: pointer;
+        }
+
+        &.selected {
+          background-color: $color-selected;
+        }
+
+        .item-title {
+          flex: 1 1 100%;
+        }
+
+        .item-duration {
+          flex: 1 1 auto;
+        }
+      }
+    }
+  }
+
+  .playlist-controls {
+    flex: 0 0 auto;
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    padding: $spacing-unit;
+
+    .load-btn-wrapper {
+      @include control-btn;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: $color-hover;
+        #fileInput {
+          cursor: pointer;
+        }
+      }
+
+      #fileInput {
+        position: absolute;
+        opacity: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+
+      .load-btn {
+        position: absolute;
+      }
+    }
+
+    .clear-btn {
+      @include control-btn;
+      margin-left: $spacing-unit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: $color-hover;
+        cursor: pointer;
+      }
+    }
+
+    .tracks-counter {
+      flex: 1 1 auto;
+      display: flex;
+      justify-content: flex-end;
+      color: $color-600;
+      font-style: italic;
+    }
+  }
+}

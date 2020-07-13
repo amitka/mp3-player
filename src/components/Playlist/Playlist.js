@@ -3,7 +3,7 @@ import useAppContext from "../../hooks/useAppContext";
 import { v4 as uuidv4 } from "uuid";
 
 const Playlist = () => {
-  const { playlist, updatePlaylist } = useAppContext();
+  const { playlist, updatePlaylist, changeTrack } = useAppContext();
   const inpRef = React.useRef();
 
   const onPlaylistChange = (e) => {
@@ -26,7 +26,7 @@ const Playlist = () => {
       <div>
         <ul>
           {playlist.map((track, index) => (
-            <li key={uuidv4()}>
+            <li key={uuidv4()} onClick={() => changeTrack(index)}>
               <span>{index + 1}. </span>
               <span>{track.name}</span>
             </li>

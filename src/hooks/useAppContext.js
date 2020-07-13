@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { AppContext } from "../AppContext";
 import * as utils from "../utils/utils";
 import { Howl, Howler } from "howler";
@@ -6,36 +6,58 @@ import { Howl, Howler } from "howler";
 const useAppContext = () => {
   const [state, setState] = React.useContext(AppContext);
 
-  const updatePlaylist = (files) => {
-    files.forEach(async (file) => {
-      const result = await utils.toBase64(file);
-      file.base64 = result;
+  let howlSound = useRef({});
+
+  useEffect(() => {
+    if (howlSound.current._src) {
+      state.isPlaying ? howlSound.current.play() : howlSound.current.pause();
+    }
+  }, [state.isPlaying]);
+
+  useEffect(() => {
+    if (howlSound.current._src !== undefined) {
+      console.log("unload");
+      //howlSound.current.unload();
+      Howler.unload();
+    }
+    const track = state.playlist[state.playIndex] || {};
+    howlSound.current = new Howl({ src: [track.base64] });
+    howlSound.current.once("load", function () {
+      console.log("loaded");
+      state.isPlaying && howlSound.current.play();
     });
     //
-    const allFiles = [...state.playlist, ...files];
-    setState((state) => ({ ...state, playlist: allFiles }));
+    //
+  }, [state.playIndex]);
+
+  const changeTrack = (index) => {
+    setState((state) => ({ ...state, playIndex: index }));
   };
 
-  const playTrack = () => {
-    //console.log("play");
-    const current = state.playlist[0];
-    const sound = new Howl({
-      src: current.base64,
-    });
-
-    // Clear listener after first call.
-    sound.once("load", function () {
-      sound.play();
-    });
-
-    // Fires when the sound finishes playing.
-    sound.on("end", function () {
-      console.log("Finished!");
-    });
-    console.log(sound);
+  const togglePlay = () => {
+    setState((state) => ({ ...state, isPlaying: !state.isPlaying }));
   };
 
-  return { updatePlaylist, playlist: state.playlist, playTrack };
+  const updatePlaylist = (files) => {
+    Promise.all(
+      files.map(async (file) => {
+        const result = await utils.toBase64(file);
+        file.base64 = result;
+      })
+    ).then(() => {
+      const allFiles = [...state.playlist, ...files];
+      console.log("update");
+      setState((state) => ({ ...state, playlist: allFiles, playIndex: 0 }));
+    });
+  };
+
+  return {
+    playlist: state.playlist,
+    playIndex: state.playIndex,
+    updatePlaylist,
+    togglePlay,
+    changeTrack,
+  };
 };
 
 export default useAppContext;

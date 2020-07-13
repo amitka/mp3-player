@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 
 const defaultState = {
-  msg: "Hello from default state",
   playlist: [],
+  playIndex: -1,
+  isPlaying: false,
 };
 
 const AppContext = React.createContext([{}, () => {}]);

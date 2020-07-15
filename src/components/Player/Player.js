@@ -2,7 +2,13 @@ import React from "react";
 import useAppContext from "../../hooks/useAppContext";
 
 const Player = () => {
-  const { togglePlay, changeTrack, playIndex, playlist } = useAppContext();
+  const {
+    togglePlay,
+    changeTrack,
+    playIndex,
+    playlist,
+    isPlaying,
+  } = useAppContext();
 
   return (
     <section>
@@ -21,7 +27,7 @@ const Player = () => {
             onClick={() => togglePlay()}
             disabled={playlist.length === 0}
           >
-            Play
+            {isPlaying ? "Pause" : "Play"}
           </button>
           <button
             id="next-btn"

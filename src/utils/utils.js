@@ -24,13 +24,16 @@ export function sec2min(duration) {
   return pad(hours, 2) + ":" + pad(minutes, 2) + ":" + pad(seconds, 2);
 }
 
-export const getTrackDuration = (file) => {
+export const getTrackDuration = (value) => {
   return new Promise((resolve, reject) => {
-    let sound = new Howl({ src: [file] });
-    sound.on("load", function () {
-      const duration = sec2min(sound.duration());
-      Howler.unload();
-      resolve(duration);
+    let howlObj = new Howl({ src: [value] });
+    if (howlObj._state === "loaded") {
+      resolve(sec2min(howlObj.duration()));
+      howlObj.unload();
+      howlObj = null;
+    }
+    howlObj.on("load", function () {
+      resolve(sec2min(howlObj.duration()));
     });
   });
 };

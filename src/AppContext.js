@@ -4,6 +4,7 @@ const defaultState = {
   playlist: [],
   playIndex: -1,
   isPlaying: false,
+  isLoading: false,
 };
 
 const AppContext = React.createContext([{}, () => {}]);
